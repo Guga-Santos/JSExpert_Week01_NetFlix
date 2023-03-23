@@ -74,8 +74,8 @@ class VideoMediaPlayer {
         return resolve();
       }
 
-      sourceBuffer.addEventListener("updateend", updateEnd)
-      sourceBuffer.addEventListener("error", reject)
+      sourceBuffer.addEventListener("updateend", updateEnd);
+      sourceBuffer.addEventListener("error", reject);
     })
   }
 }
