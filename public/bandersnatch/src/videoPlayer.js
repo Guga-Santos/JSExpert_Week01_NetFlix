@@ -15,7 +15,7 @@ class VideoMediaPlayer {
 
     const codecSupported = MediaSource.isTypeSupported(this.manifestJSON.codec);
     if(!codecSupported) {
-      alert('This browser do not support the codec: %s', this.manifestJSON.codec);
+      alert(`This browser do not support the codec: ${this.manifestJSON.codec}` );
     }
   }
 }
