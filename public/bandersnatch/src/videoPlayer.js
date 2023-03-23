@@ -57,6 +57,15 @@ class VideoMediaPlayer {
 
   currentFileResolution() {
     const LOWER_RESOLUTION = 144;
+    const prepareUrl = {
+      url: this.manifestJSON.finalizar.url,
+      fileResolution: LOWER_RESOLUTION,
+      fileResolutionTag: this.manifestJSON.fileResolutionTag,
+      hostTag: this.manifestJSON.hostTag
+    }
+
+    const url = this.network.parseManifestURL(prepareUrl);
+    return this.network.getProperResolution(url)
   }
 
   async nextChunk(data) {
@@ -73,9 +82,11 @@ class VideoMediaPlayer {
   }
 
   async fileDownload(url) {
+    const fileResolution = await this.currentFileResolution();
+    console.log('fileResolution: ', fileResolution)
     const prepareUrl = {
       url,
-      fileResolution: 360,
+      fileResolution,
       fileResolutionTag: this.manifestJSON.fileResolutionTag,
       hostTag: this.manifestJSON.hostTag
     }

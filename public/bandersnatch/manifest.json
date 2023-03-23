@@ -7,13 +7,13 @@
   "intro": {
     "url": "$HOST/timeline/01.intro/01.intro-12.733333-$RESOLUTION.mp4/",
     "at": 10,
-    "options": ["Guitarra", "Violão"],
+    "options": ["Guitarra", "Violao"],
     "defaultOption": "Guitarra"
   },
   "guitarra": {
     "url": "$HOST/timeline/02.guitarra/02.guitarra-20.733333-$RESOLUTION.mp4/",
     "at": 18,
-    "options": ["Finalizar", "Violão"],
+    "options": ["Finalizar", "Violao"],
     "defaultOption": ""
   },
   "violao": {
