@@ -1,10 +1,12 @@
 class VideoMediaPlayer {
   constructor({ manifestJSON, network }) {
     this.manifestJSON = manifestJSON;
+    this.network = network;
+
     this.videoElement = null;
     this.sourceBuffer = null;
     this.selected = {};
-    this.network = network;
+    this.videoDuration = 0;
   }
 
   initializeCodec() {
@@ -33,7 +35,7 @@ class VideoMediaPlayer {
       this.sourceBuffer = mediaSource.addSourceBuffer(this.manifestJSON.codec);
       const selected = this.selected = this.manifestJSON.intro
       //Evita rodar como LIVE
-      mediaSource.duration = 0;
+      mediaSource.duration = this.videoDuration;
       await this.fileDownload(selected.url)
 
     }
@@ -49,5 +51,11 @@ class VideoMediaPlayer {
 
     const finalUrl = this.network.parseManifestURL(prepareUrl)
     console.log('finalURL: ', finalUrl)
+  }
+
+  setVideoPlayerDuration(finalURL) {
+    const bars = finalURL.split('/');
+    const [ name, videoDuration, resolution ] = bars.at(-2).split('-')
+    this.videoDuration = videoDuration;
   }
 }
