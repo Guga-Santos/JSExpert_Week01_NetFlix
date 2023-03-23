@@ -17,6 +17,12 @@ class VideoComponent {
     this.modal = modal;
   }
 
+  configureMoral(selected) {
+    const modal = this.modal
+    modal.on('modalopen', this.getModalTemplate(selected, modal))
+    modal.open()
+  }
+
   getModalTemplate(options, modal) {
     return (_) => {
       const [ option1, option2 ] = options;
@@ -26,18 +32,20 @@ class VideoComponent {
           <button 
           type="button" 
           class="btn btn-dark"
-          onClick="window.nextchunk('${option1}')>
+          onClick="window.nextchunk('${option1}')">
           ${option1}
           </button>
           <button 
           type="button" 
           class="btn btn-dark"
-          onClick="window.nextchunk('${option2}')>
+          onClick="window.nextchunk('${option2}')">
           ${option2}
           </button>
         </div>
       </div>
       `
+
+      modal.contentEl().innerHTML = htmlTemplate
     }
   }
 
