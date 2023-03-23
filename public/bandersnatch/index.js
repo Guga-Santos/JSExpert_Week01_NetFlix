@@ -12,6 +12,7 @@ async function main() {
         manifestJSON
     })
 
+    videoPlayer.initializeCodec()
     videoComponent.initializePlayer();
 }
 
