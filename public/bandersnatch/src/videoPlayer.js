@@ -50,12 +50,32 @@ class VideoMediaPlayer {
     }
 
     const finalUrl = this.network.parseManifestURL(prepareUrl)
-    console.log('finalURL: ', finalUrl)
+    this.setVideoPlayerDuration(finalUrl);
+    const data = await this.network.fetchFile(finalUrl);
+    return this.processBufferSegments(data)
+    
   }
 
   setVideoPlayerDuration(finalURL) {
     const bars = finalURL.split('/');
     const [ name, videoDuration, resolution ] = bars.at(-2).split('-')
     this.videoDuration = videoDuration;
+  }
+
+  async processBufferSegments(allSegments) {
+    const sourceBuffer = this.sourceBuffer;
+    sourceBuffer.appendBuffer(allSegments);
+
+    return new Promise((resolve, reject) => {
+      const updateEnd = (_) => {
+        sourceBuffer.removeEventListener("updateend", updateEnd);
+        sourceBuffer.timestampOffset = this.videoDuration;
+
+        return resolve();
+      }
+
+      sourceBuffer.addEventListener("updateend", updateEnd)
+      sourceBuffer.addEventListener("error", reject)
+    })
   }
 }
