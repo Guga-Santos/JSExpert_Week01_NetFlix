@@ -36,4 +36,10 @@ class VideoMediaPlayer {
 
     }
   }
+
+  async fileDownload(url) {
+    const prepareUrl = {
+      
+    }
+  }
 }
