@@ -8,6 +8,7 @@ class VideoMediaPlayer {
     this.sourceBuffer = null;
     this.selected = {};
     this.videoDuration = 0;
+    this.activeItem = {};
   }
 
   initializeCodec() {
@@ -38,12 +39,37 @@ class VideoMediaPlayer {
       //Evita rodar como LIVE
       mediaSource.duration = this.videoDuration;
       await this.fileDownload(selected.url)
+      setInterval(this.waitForQuestions.bind(this), 200)
 
     }
   }
 
   waitForQuestions() {
-    this.videoComponent.configureMoral(this.selected.options)
+    const currentTime = parseInt(this.videoElement.currentTime);
+    const option = this.selected.at === currentTime
+    
+    if(!option) return
+    // Evita que o modal apareça mais de uma vez no mesmo segundo.
+    if(this.activeItem.url === this.selected.url) return;
+    this.videoComponent.configureModal(this.selected.options);
+    this.activeItem = this.selected;
+  }
+
+  currentFileResolution() {
+    const LOWER_RESOLUTION = 144;
+  }
+
+  async nextChunk(data) {
+    const key = data.toLowerCase();
+    const selected = this.manifestJSON[key];
+    this.selected = {
+      ...selected,
+      // Ajusta o tempo que o modal vai aparecer, baseado no tempo corrente.
+      at: parseInt(this.videoElement.currentTime + selected.at)
+    }
+    // Deixa o restante do vídeo rodando enquanto baixa o próximo vídeo.
+    this.videoElement.play()
+    await this.fileDownload(selected.url);
   }
 
   async fileDownload(url) {
@@ -64,7 +90,7 @@ class VideoMediaPlayer {
   setVideoPlayerDuration(finalURL) {
     const bars = finalURL.split('/');
     const [ name, videoDuration, resolution ] = bars.at(-2).split('-')
-    this.videoDuration = videoDuration;
+    this.videoDuration = parseFloat(videoDuration);
   }
 
   async processBufferSegments(allSegments) {
