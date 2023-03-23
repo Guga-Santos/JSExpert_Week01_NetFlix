@@ -1,7 +1,8 @@
 class VideoMediaPlayer {
-  constructor({ manifestJSON, network }) {
+  constructor({ manifestJSON, network, videoComponent }) {
     this.manifestJSON = manifestJSON;
     this.network = network;
+    this.videoComponent = videoComponent;
 
     this.videoElement = null;
     this.sourceBuffer = null;
@@ -39,6 +40,10 @@ class VideoMediaPlayer {
       await this.fileDownload(selected.url)
 
     }
+  }
+
+  waitForQuestions() {
+    this.videoComponent.configureMoral(this.selected.options)
   }
 
   async fileDownload(url) {
